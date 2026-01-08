@@ -11,13 +11,14 @@ This repository contains the official implementation for the paper:
 > **"Uncertainty quantification for joint demand prediction of multi-modal ride-sourcing services using spatiotemporal Mixture-of-Expert neural network"**
 >
 > *Transportation Research Part C: Emerging Technologies*, 2026
-
+Paper URL: https://linkinghub.elsevier.com/retrieve/pii/S0968090X2500511X
 ## Overview
+This REPO is a REFACTORED version, he original codes are available at: https://github.com/crimsonduanyu/MoE-UQ
 
 ST-MoE-RMQRN is a deep learning model for **multi-task demand forecasting** with **probabilistic uncertainty quantification**. Key features:
 
-- 🎯 **Multi-task learning**: Joint prediction for multiple transportation modes (ride-sourcing, taxi, bike-sharing)
-- 🔮 **Uncertainty quantification**: Recurrent multi-quantile regression for prediction intervals
+- 🎯 **Multi-task learning**: Joint prediction for multiple transportation modes (ride-hailing, ride-splitting)
+- 🔮 **Uncertainty quantification**: Residual multi-quantile regression for prediction intervals
 - 🧠 **Mixture-of-Experts**: Environment-aware routing with spatiotemporal experts
 - 📊 **Spatiotemporal modeling**: Bidirectional TCN and Chebyshev Graph Convolution
 
@@ -152,42 +153,6 @@ predictions = model(x)
 # Output: (batch, num_tasks, num_quantiles, space_dim, t_out)
 ```
 
-## Model Architecture
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│                        ST-MoE-RMQRN                             │
-├─────────────────────────────────────────────────────────────────┤
-│  Input: Multi-source demand data + Contextual features         │
-│         (batch, tasks, nodes + context, timesteps)              │
-├─────────────────────────────────────────────────────────────────┤
-│  ┌─────────────────┐    ┌─────────────────┐                     │
-│  │ Task-Specific   │    │ Shared Experts  │                     │
-│  │ Experts         │    │ (with routing)  │                     │
-│  │                 │    │                 │                     │
-│  │ ┌─────────────┐ │    │ ┌─────────────┐ │  ┌───────────────┐ │
-│  │ │ ST Backbone │ │    │ │ ST Backbone │ │  │ Env-Aware     │ │
-│  │ │ (TCN + GCN) │ │    │ │ (TCN + GCN) │ │←─│ Router        │ │
-│  │ └─────────────┘ │    │ └─────────────┘ │  │ (contextual)  │ │
-│  └────────┬────────┘    └────────┬────────┘  └───────────────┘ │
-│           │                      │                              │
-│           └──────────┬───────────┘                              │
-│                      ▼                                          │
-│              ┌───────────────┐                                  │
-│              │ Expert Gate   │                                  │
-│              │ (per task)    │                                  │
-│              └───────┬───────┘                                  │
-│                      ▼                                          │
-│              ┌───────────────┐                                  │
-│              │ RMQR Head     │                                  │
-│              │ (quantiles)   │                                  │
-│              └───────────────┘                                  │
-├─────────────────────────────────────────────────────────────────┤
-│  Output: Quantile predictions with uncertainty estimates        │
-│          (batch, tasks, quantiles, nodes, timesteps)            │
-└─────────────────────────────────────────────────────────────────┘
-```
-
 ## Evaluation Metrics
 
 ### Deterministic Metrics
@@ -209,9 +174,9 @@ predictions = model(x)
 For each city directory (`Datasets/{city}/`):
 
 1. **Demand data** (parquet format):
-   - `rs_dataset_df_{granularity}min.parquet`: Ride-sourcing demand
-   - `kc_dataset_df_{granularity}min.parquet`: Taxi demand
-   - `zc_dataset_df_{granularity}min.parquet`: Bike-sharing demand (Beijing only)
+   - `rs_dataset_df_{granularity}min.parquet`: Ride-splitting demand
+   - `kc_dataset_df_{granularity}min.parquet`: Ride-hailing demand
+   - `zc_dataset_df_{granularity}min.parquet`: Premium Ride-hailing demand (Beijing only)
 
 2. **Contextual data**:
    - `weather_normalized.csv`: Weather features with datetime index
@@ -242,8 +207,3 @@ If you find this work useful, please cite:
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-- Chebyshev Graph Convolution implementation inspired by [ChebNet](https://arxiv.org/abs/1606.09375)
-- Vision Transformer components from [timm](https://github.com/rwightman/pytorch-image-models)

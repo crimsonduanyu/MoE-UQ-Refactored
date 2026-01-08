@@ -1,0 +1,9 @@
+name: SyntheticCity
+num_zones: 200
+num_days: 30
+time_granularity: 15
+num_sources: 2
+source_names: ['rs', 'kc']
+total_timesteps: 2880
+random_seed: 42
+generated_at: 2026-01-08T16:44:18.099731

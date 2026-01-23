@@ -12,6 +12,8 @@ This repository contains the official implementation for the paper:
 >
 > *Transportation Research Part C: Emerging Technologies*, 2026
 Paper URL: https://linkinghub.elsevier.com/retrieve/pii/S0968090X2500511X
+Full-text Preprint is available at: https://www.researchgate.net/publication/399277198_Uncertainty_Quantification_for_Joint_Demand_Prediction_of_Multi-modal_Ride-sourcing_Services_Using_Spatiotemporal_Mixture-of-Expert_Neural_Network
+
 ## Overview
 This REPO is a REFACTORED version, he original codes are available at: https://github.com/crimsonduanyu/MoE-UQ
 
